@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-e%mh4l1w8o#vxk5$ngj&uh@iez=0ab&x^g9$iifyv!7=8^2%b!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Library pihak ketiga
+    'ninja',
+    'ninja_extra',  # <--- TAMBAHKAN BARIS INI
+    
+    # Aplikasi buatanmu
     'courses',
 ]
 
