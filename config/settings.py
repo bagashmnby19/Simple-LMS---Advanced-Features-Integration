@@ -136,3 +136,35 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Beritahu Django jangan pakai User bawaan, pakai yang di app courses
 AUTH_USER_MODEL = 'courses.User'
+
+# 1. Redis Caching Configuration
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# 2. Celery Configuration
+CELERY_BROKER_URL = "amqp://guest:guest@rabbitmq:5672//"
+CELERY_RESULT_BACKEND = "redis://redis:6379/1"
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Jakarta'
+
+# 3. MongoDB Configuration Connection
+import pymongo
+MONGO_CLIENT = pymongo.MongoClient("mongodb://mongodb:27017/")
+MONGO_DB = MONGO_CLIENT["healthylife_logs"]
+
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'update-course-stats-every-hour': {
+        'task': 'courses.tasks.update_course_statistics',
+        'schedule': crontab(minute=0, hour='*'), # Berjalan setiap jam sekali
+    },
+}
